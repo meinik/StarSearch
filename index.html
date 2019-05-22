@@ -1,0 +1,132 @@
+<!--
+    Please preform the following task. Using the https://swapi.co/api/people/  endpoint and the HTML input element, 
+        create a component that shows recommendations for autocomplete based off the name of Star Wars characters. 
+        The design is completely up to you on how to implement this. 
+        This only needs to show the filtered results, but bonus points are given if the list can be interacted with.
+
+Requirements:
+Use only vanilla javascript and css (no frameworks like React, Bootstrap, Angular, etc...)
+This only needs to work in the latest version of Chrome, so please try to use any HTML elements and syntax that will work in this browser.
+-->
+
+<!--
+    Author: Laura Niklitschek
+    E-mail: laura.nik@gmail.com
+    Phone: (385)254-9597
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:800&display=swap" rel="stylesheet">
+    <title>Software Dev Engineer 1 challenge</title>
+
+    <!--  CSS  -->
+    <style>
+        body {
+            background-color: black;
+            text-align: center;
+        }
+
+        .main {
+            background-image: url(bg.jpg);
+            height: 800px;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            position: relative;
+        }
+
+        .top {
+            text-align: center;
+            color: white;
+            padding: 5%;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 60px;
+        }
+
+        #name-search {
+            font-size: 30px;
+            padding: 0 10px;
+            border: 2px solid #ccc;
+            width: 80%;
+            color: #666;
+            line-height: 3;
+            border-radius: 7px;
+            font-family: 'PT Sans', sans-serif;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main">
+
+        <div class="top">
+            <label for="site-search">STAR WARS <br> character search</label>
+        </div>
+
+        <div id="middle">
+            <input type="search" id="name-search" placeholder="Type a name..." list="the-list" autocomplete="on"
+                onkeyup="myFunction()" oninput='onInput()'>
+
+            <!--shows the values that match the query-->
+            <datalist id="the-list"></datalist>
+        </div>
+    </div>
+    <script>
+
+        //retrieve and populate the options
+
+        function myFunction() {
+
+            //variables
+            var x = document.getElementById("name-search");
+            var url = "https://swapi.co/api/people/?search=" + x.value;
+            const thelist = document.getElementById("the-list");
+            var options = "";
+
+            //get data from the API
+            fetch(url)
+                .then(response => {
+                    return response.json()
+                })
+                .then(data => {
+
+                    //create the list and append the options
+                    for (let i = 0; i < data.results.length; i++) {
+                        console.log(data.results[i].name);
+                        options += '<option value="' + data.results[i].name + '" , id="opt" ' + ' />'
+                        document.getElementById('the-list').innerHTML = options;
+                    }
+                })
+                .catch(err => {
+                    // error message
+                    console.log("oopsie!");
+                })
+
+        }
+
+        //open new window when clicking on the option
+
+        function onInput() {
+            var val = document.getElementById("name-search").value;
+            var opts = document.getElementById('the-list').childNodes;
+            for (var i = 0; i < opts.length; i++) {
+                if (opts[i].value === val) {
+                    window.open('http://google.com/search?q=' + opts[i].value);
+                    break;
+                }
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>
